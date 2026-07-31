@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Informe Interactivo · Matrícula por Programa · CB 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#132038;
+    --navy-mid:#1F3A5F;
+    --blue-mid:#2A5788;
+    --blue-mid-2:#3B72A3;
+    --paper:#F5F2EA;
+    --paper-2:#EFEAE0;
+    --card:#FFFFFF;
+    --gold:#B98D3E;
+    --gold-light:#FFCE3D;
+    --white-strong:#FFFFFF;
+    --white-soft:#E6EBF7;
+    --coral:#B7433C;
+    --coral-bg:#F6DEDC;
+    --amber:#C98A2E;
+    --amber-bg:#F5E4C6;
+    --sage:#4C7A5C;
+    --sage-bg:#DCEADF;
+    --ink:#232019;
+    --ink-soft:#5B584F;
+    --line:#DCD5C4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Sans Pro',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- TOP NAV (sections) ---------- */
+  .topnav{
+    position:sticky; top:0; z-index:50;
+    background:var(--navy-deep); border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .topnav .wrap{display:flex; align-items:center; justify-content:space-between; padding:0 32px; gap:20px; flex-wrap:wrap;}
+  .topnav-brand{font-family:'Merriweather',serif; font-weight:700; font-size:15px; color:var(--white-strong); padding:14px 0;}
+  .topnav-brand span{color:var(--gold-light);}
+  .section-tabs{display:flex; gap:6px; padding:10px 0;}
+  .section-tab{
+    appearance:none; border:1px solid rgba(255,255,255,0.16); background:transparent; color:var(--white-soft);
+    font-family:'Source Sans Pro',sans-serif; font-weight:700; font-size:12.5px; letter-spacing:.03em;
+    padding:9px 18px; border-radius:20px; cursor:pointer; transition:all .15s ease; text-transform:uppercase;
+  }
+  .section-tab:hover{border-color:rgba(255,255,255,0.4); color:var(--white-strong);}
+  .section-tab.active{background:var(--gold); border-color:var(--gold); color:var(--navy-deep);}
+
+  .section-page{display:none;}
+  .section-page.active{display:block;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    background:linear-gradient(160deg, rgba(19,32,56,0.96) 0%, rgba(42,87,136,0.90) 100%);
+    color:#F2EFE6;
+    padding:48px 0 40px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::after{
+    content:""; position:absolute; right:-120px; top:-120px;
+    width:420px; height:420px; border-radius:50%; border:1px solid rgba(242,239,230,0.08);
+  }
+  header.hero::before{
+    content:""; position:absolute; right:-40px; top:-40px;
+    width:280px; height:280px; border-radius:50%; border:1px solid rgba(242,239,230,0.08);
+  }
+  .eyebrow{
+    font-size:13px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--gold-light); font-weight:800; margin-bottom:12px;
+  }
+  h1.title{
+    font-family:'Merriweather',serif; font-weight:700;
+    font-size:38px; line-height:1.14; max-width:760px; letter-spacing:-.01em;
+  }
+  .subtitle{
+    margin-top:12px; font-size:15.5px; color:var(--white-soft); max-width:640px; line-height:1.55; font-weight:500;
+  }
+  .hero-meta{display:flex; gap:28px; margin-top:24px; flex-wrap:wrap;}
+  .hero-meta div{font-size:13px; color:var(--white-soft);}
+  .hero-meta strong{display:block; color:var(--white-strong); font-size:15.5px; font-weight:700; margin-top:2px;}
+
+  /* ---------- KPI STRIP ---------- */
+  section.kpis{margin-top:-30px; position:relative; z-index:2;}
+  .kpi-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+  .kpi-card{
+    background:linear-gradient(160deg, var(--blue-mid) 0%, var(--blue-mid-2) 100%); border:1px solid var(--blue-mid); border-radius:4px;
+    padding:20px 20px 18px; box-shadow:0 12px 30px -18px rgba(19,32,56,0.35);
+  }
+  .kpi-label{font-size:11.5px; text-transform:uppercase; letter-spacing:.09em; color:var(--gold-light); font-weight:800;}
+  .kpi-value{font-family:'Merriweather',serif; font-size:28px; font-weight:700; margin-top:8px; color:var(--white-strong);}
+  .kpi-sub{font-size:12.5px; margin-top:6px; color:var(--white-soft); font-weight:500;}
+  .kpi-sub b{color:var(--gold-light);}
+  .kpi-bar-track{height:5px; background:rgba(242,239,230,0.18); border-radius:3px; margin-top:12px; overflow:hidden;}
+  .kpi-bar-fill{height:100%; border-radius:3px;}
+
+  /* ---------- SECTION GENERIC ---------- */
+  section.block{padding:56px 0 8px;}
+  .block-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:22px; gap:24px; flex-wrap:wrap;}
+  .block-num{font-family:'Merriweather',serif; font-size:20px; color:var(--gold); font-weight:700; letter-spacing:.06em;}
+  h2.block-title{font-family:'Merriweather',serif; font-size:24px; font-weight:700; color:var(--navy-deep); margin-top:4px;}
+  .block-desc{font-size:13px; color:var(--ink-soft); max-width:420px; text-align:right; line-height:1.5;}
+
+  /* ---------- CU/CT SELECTOR CARDS ---------- */
+  .picker-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:12px;
+  }
+  .picker-card{
+    text-align:left; cursor:pointer; background:var(--card); border:1px solid var(--line); border-radius:6px;
+    padding:14px 16px; transition:all .15s ease; position:relative; overflow:hidden;
+  }
+  .picker-card:hover{border-color:var(--blue-mid-2); box-shadow:0 8px 20px -14px rgba(19,32,56,0.4); transform:translateY(-1px);}
+  .picker-card.active{border-color:var(--navy-deep); background:var(--navy-deep); box-shadow:0 10px 24px -14px rgba(19,32,56,0.5);}
+  .picker-card .p-name{font-size:13.5px; font-weight:700; color:var(--ink);}
+  .picker-card.active .p-name{color:var(--white-strong);}
+  .picker-card .p-sub{font-size:11px; color:var(--ink-soft); margin-top:3px;}
+  .picker-card.active .p-sub{color:var(--white-soft);}
+  .picker-card .p-pct{font-family:'Merriweather',serif; font-weight:700; font-size:17px; margin-top:8px;}
+  .picker-card .p-track{height:4px; background:var(--paper-2); border-radius:3px; margin-top:8px; overflow:hidden;}
+  .picker-card.active .p-track{background:rgba(255,255,255,0.15);}
+  .picker-card .p-fill{height:100%; border-radius:3px;}
+  .picker-card .p-tag{
+    position:absolute; top:10px; right:10px; font-size:9px; font-weight:800; text-transform:uppercase;
+    letter-spacing:.05em; padding:2px 7px; border-radius:10px;
+  }
+
+  .tier-critical{background:var(--coral);}
+  .tier-warning{background:var(--amber);}
+  .tier-good{background:var(--sage);}
+  .pct-critical{color:var(--coral);}
+  .pct-warning{color:var(--amber);}
+  .pct-good{color:var(--sage);}
+  .tag-critical{background:var(--coral-bg); color:var(--coral);}
+  .tag-warning{background:var(--amber-bg); color:var(--amber);}
+  .tag-good{background:var(--sage-bg); color:var(--sage);}
+
+  .legend{display:flex; gap:22px; margin-top:14px; font-size:11.5px; color:var(--ink-soft); flex-wrap:wrap;}
+  .legend i{width:9px; height:9px; display:inline-block; border-radius:50%; margin-right:6px; vertical-align:middle;}
+
+  /* ---------- SELECTED CU/CT SUMMARY ---------- */
+  .selected-summary{
+    margin-top:28px; background:var(--navy-deep); border-radius:6px; padding:22px 26px; color:var(--white-strong);
+    display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap;
+  }
+  .selected-summary h3{font-family:'Merriweather',serif; font-size:20px; font-weight:700;}
+  .selected-summary .sel-meta{font-size:12.5px; color:var(--white-soft); margin-top:4px;}
+  .selected-stats{display:flex; gap:28px; flex-wrap:wrap;}
+  .selected-stats div{text-align:right;}
+  .selected-stats .s-label{font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--gold-light); font-weight:800;}
+  .selected-stats .s-value{font-family:'Merriweather',serif; font-size:21px; font-weight:700; margin-top:3px;}
+
+  /* ---------- BULLET CHARTS (per program) ---------- */
+  .bullet-grid{
+    display:grid; grid-template-columns:1fr; gap:10px; margin-top:22px;
+  }
+  .bullet-card{
+    background:var(--card); border:1px solid var(--line); border-radius:6px; padding:16px 22px;
+    display:grid; grid-template-columns:230px 1fr 190px; align-items:center; gap:20px;
+  }
+  .bullet-name{font-size:13.5px; font-weight:700; color:var(--ink); line-height:1.3;}
+  .bullet-name .b-sub{display:block; font-size:11px; font-weight:500; color:var(--ink-soft); margin-top:3px;}
+  .bullet-chart{position:relative;}
+  .bullet-track{
+    position:relative; height:26px; background:var(--paper-2); border-radius:3px;
+  }
+  .bullet-band{position:absolute; top:0; bottom:0;}
+  .band-poor{background:var(--coral-bg);}
+  .band-satis{background:var(--amber-bg);}
+  .band-good{background:var(--sage-bg);}
+  .bullet-fill{
+    position:absolute; left:0; top:7px; bottom:7px; border-radius:2px; z-index:2;
+  }
+  .bullet-target{
+    position:absolute; top:2px; bottom:2px; width:3px; background:var(--navy-deep); z-index:3;
+  }
+  .bullet-target::after{
+    content:"META"; position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+    font-size:8px; letter-spacing:.06em; color:var(--navy-deep); font-weight:700; white-space:nowrap;
+  }
+  .bullet-labels{display:flex; justify-content:space-between; font-size:9.5px; color:var(--ink-soft); margin-top:4px; font-variant-numeric:tabular-nums;}
+  .bullet-stats{text-align:right; font-variant-numeric:tabular-nums;}
+  .bullet-pct{font-family:'Merriweather',serif; font-size:19px; font-weight:700;}
+  .bullet-gap{font-size:11px; color:var(--coral); font-weight:600; margin-top:2px;}
+  .bullet-gap.positive{color:var(--sage);}
+  .bullet-breakdown{display:flex; gap:6px; margin-top:6px; justify-content:flex-end; flex-wrap:wrap;}
+  .bd-chip{font-size:9.5px; padding:2px 7px; border-radius:10px; background:var(--paper-2); color:var(--ink-soft); font-weight:700;}
+
+  .empty-state{padding:40px; text-align:center; color:var(--ink-soft); font-size:13.5px; background:var(--card); border:1px dashed var(--line); border-radius:6px;}
+
+  footer{
+    margin-top:60px; padding:24px 0; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width:900px){
+    .kpi-grid{grid-template-columns:repeat(2,1fr);}
+    .bullet-card{grid-template-columns:1fr; text-align:left; gap:10px;}
+    .bullet-stats{text-align:left;}
+    .bullet-breakdown{justify-content:flex-start;}
+    h1.title{font-size:28px;}
+    .block-desc{text-align:left; max-width:100%;}
+    .selected-summary{flex-direction:column; align-items:flex-start;}
+    .selected-stats{justify-content:flex-start; width:100%;}
+    .selected-stats div{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wrap">
+    <div class="topnav-brand">Informe de Matrícula <span>&middot; Sede Cundinamarca Boyacá</span></div>
+    <div class="section-tabs">
+      <button class="section-tab active" data-page="s2" onclick="switchPage('s2')">Programa S2 2026</button>
+      <button class="section-tab" data-page="q3" onclick="switchPage('q3')">Programa Q3</button>
+    </div>
+  </div>
+</nav>
+
+<div class="section-page active" id="page-s2">
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Sede Cundinamarca Boyacá</div>
+      <h1 class="title">Informe de Matrículas por Programa</h1>
+      <p class="subtitle">Selecciona un centro tutorial (CT) o universitario (CU) para ver el detalle de matrícula por programa académico, frente a su meta.</p>
+      <div class="hero-meta">
+        <div>Corte de datos<strong>30 / 07 / 2026</strong></div>
+        <div>Modalidad<strong>Presencial y distancia</strong></div>
+        <div>Centros (CU/CT)<strong>12</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="kpis">
+    <div class="wrap">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Estudiantes matriculados</div>
+          <div class="kpi-value">4.650</div>
+          <div class="kpi-sub">Meta 6.009 &middot; faltan <b>1.359</b></div>
+          <div class="kpi-bar-track"><div class="kpi-bar-fill tier-good" style="width:77.38%"></div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Cumplimiento total</div>
+          <div class="kpi-value">77,38%</div>
+          <div class="kpi-sub">De la meta total de nuevos y continuos</div>
+          <div class="kpi-bar-track"><div class="kpi-bar-fill tier-good" style="width:77.38%"></div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Nuevos</div>
+          <div class="kpi-value">59,94%</div>
+          <div class="kpi-sub">576 de 961 nuevos</div>
+          <div class="kpi-bar-track"><div class="kpi-bar-fill tier-good" style="width:59.94%"></div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Continuos</div>
+          <div class="kpi-value">80,71%</div>
+          <div class="kpi-sub">4.074 de 5.048 continuos</div>
+          <div class="kpi-bar-track"><div class="kpi-bar-fill tier-good" style="width:80.71%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="block-head">
+        <div>
+          <div class="block-num">01 &mdash; Selección</div>
+          <h2 class="block-title">Elige un CU o CT</h2>
+        </div>
+        <div class="block-desc">Cada tarjeta resume el cumplimiento total del centro. Selecciona una para filtrar las gráficas bala por programa.</div>
+      </div>
+      <div class="picker-grid" id="picker-s2"></div>
+      <div class="legend">
+        <div><i style="background:var(--sage)"></i>&ge; 50% de la meta</div>
+        <div><i style="background:var(--amber)"></i>25% &ndash; 50% de la meta</div>
+        <div><i style="background:var(--coral)"></i>&lt; 25% de la meta</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="block-head">
+        <div>
+          <div class="block-num">02 &mdash; Detalle</div>
+          <h2 class="block-title">Cumplimiento por programa</h2>
+        </div>
+        <div class="block-desc">Gráfica bala por programa: valor ejecutado frente a la meta, porcentaje de cumplimiento y brecha.</div>
+      </div>
+      <div id="summary-s2"></div>
+      <div class="bullet-grid" id="bullets-s2"></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Fuente: Hoja "CU Y CT por programa S2" &middot; Corte 30/07/2026</span>
+    <span>Informe interactivo &middot; Informe de Matrículas por Programa</span>
+  </footer>
+
+</div>
+
+<div class="section-page" id="page-q3">
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Sede Cundinamarca Boyacá</div>
+      <h1 class="title">Informe de Matrículas Q3 por Programa</h1>
+      <p class="subtitle">Selecciona un centro tutorial (CT) o universitario (CU) para ver el detalle de matrícula por programa académico, frente a su meta.</p>
+      <div class="hero-meta">
+        <div>Corte de datos<strong>30 / 07 / 2026</strong></div>
+        <div>Modalidad<strong>Presencial y distancia</strong></div>
+        <div>Centros (CU/CT)<strong>12</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="kpis">
+    <div class="wrap">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Estudiantes matriculados</div>
+          <div class="kpi-value">844</div>
+          <div class="kpi-sub">Meta 2.841 &middot; faltan <b>1.997</b></div>
+          <div class="kpi-bar-track"><div class="kpi-bar-fill tier-warning" style="width:29.71%"></div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Cumplimiento total</div>
+          <div class="kpi-value">29,71%</div>
+          <div class="kpi-sub">De la meta total de nuevos y continuos</div>
+          <div class="kpi-bar-track"><div class="kpi-bar-fill tier-warning" style="width:29.71%"></div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Nuevos</div>
+          <div class="kpi-value">20,61%</div>
+          <div class="kpi-sub">143 de 694 nuevos</div>
+          <div class="kpi-bar-track"><div class="kpi-bar-fill tier-critical" style="width:20.61%"></div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Continuos</div>
+          <div class="kpi-value">32,65%</div>
+          <div class="kpi-sub">701 de 2.147 continuos</div>
+          <div class="kpi-bar-track"><div class="kpi-bar-fill tier-warning" style="width:32.65%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="block-head">
+        <div>
+          <div class="block-num">01 &mdash; Selección</div>
+          <h2 class="block-title">Elige un CU o CT</h2>
+        </div>
+        <div class="block-desc">Cada tarjeta resume el cumplimiento total del centro. Selecciona una para filtrar las gráficas bala por programa.</div>
+      </div>
+      <div class="picker-grid" id="picker-q3"></div>
+      <div class="legend">
+        <div><i style="background:var(--sage)"></i>&ge; 50% de la meta</div>
+        <div><i style="background:var(--amber)"></i>25% &ndash; 50% de la meta</div>
+        <div><i style="background:var(--coral)"></i>&lt; 25% de la meta</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="block-head">
+        <div>
+          <div class="block-num">02 &mdash; Detalle</div>
+          <h2 class="block-title">Cumplimiento por programa</h2>
+        </div>
+        <div class="block-desc">Gráfica bala por programa: valor ejecutado frente a la meta, porcentaje de cumplimiento y brecha.</div>
+      </div>
+      <div id="summary-q3"></div>
+      <div class="bullet-grid" id="bullets-q3"></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Fuente: Hoja "CU - CT por programa Q3" &middot; Corte 30/07/2026</span>
+    <span>Informe interactivo &middot; Informe de Matrículas Q3 por Programa</span>
+  </footer>
+
+</div>
+
+<script>
+const REPORT_DATA = {"s2": {"cutoff": "30/07/2026", "total": {"nuevos_real": 576, "nuevos_meta": 961, "continuos_real": 4074, "continuos_meta": 5048, "total_real": 4650, "total_meta": 6009, "nuevos_pct": 0.5993756503642039, "continuos_pct": 0.8070522979397782, "total_pct": 0.7738392411382926, "gap": -1359, "tier": "good"}, "groups": [{"id": "CU Soacha", "label": "CU Soacha", "totals": {"nuevos_real": 191, "nuevos_meta": 337, "continuos_real": 2145, "continuos_meta": 2332, "total_real": 2336, "total_meta": 2669, "nuevos_pct": 0.5667655786350149, "continuos_pct": 0.9198113207547169, "total_pct": 0.8752341701011614, "gap": -333, "tier": "good"}, "programs": [{"name": "Licenciatura en Educación Infantil", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 64, "continuos_meta": 61, "total_real": 64, "total_meta": 61, "nuevos_pct": null, "continuos_pct": 1.0491803278688525, "total_pct": 1.0491803278688525, "gap": 3, "tier": "good"}, {"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 1, "continuos_meta": 1, "total_real": 1, "total_meta": 1, "nuevos_pct": null, "continuos_pct": 1.0, "total_pct": 1.0, "gap": 0, "tier": "good"}, {"name": "Licenciatura en Pedagogía Infantil", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 1, "continuos_meta": 1, "total_real": 1, "total_meta": 1, "nuevos_pct": null, "continuos_pct": 1.0, "total_pct": 1.0, "gap": 0, "tier": "good"}, {"name": "Administración de Empresas", "nuevos_real": 10, "nuevos_meta": 0, "continuos_real": 172, "continuos_meta": 184, "total_real": 182, "total_meta": 184, "nuevos_pct": null, "continuos_pct": 0.9347826086956522, "total_pct": 0.9891304347826086, "gap": -2, "tier": "good"}, {"name": "Diseño Gráfico", "nuevos_real": 22, "nuevos_meta": 30, "continuos_real": 229, "continuos_meta": 232, "total_real": 251, "total_meta": 262, "nuevos_pct": 0.7333333333333333, "continuos_pct": 0.9870689655172413, "total_pct": 0.9580152671755725, "gap": -11, "tier": "good"}, {"name": "Comunicación Social - Periodismo", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 61, "continuos_meta": 70, "total_real": 61, "total_meta": 70, "nuevos_pct": null, "continuos_pct": 0.8714285714285714, "total_pct": 0.8714285714285714, "gap": -9, "tier": "good"}, {"name": "Tecnología en Informática", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 27, "continuos_meta": 31, "total_real": 27, "total_meta": 31, "nuevos_pct": null, "continuos_pct": 0.8709677419354839, "total_pct": 0.8709677419354839, "gap": -4, "tier": "good"}, {"name": "Trabajo Social", "nuevos_real": 3, "nuevos_meta": 0, "continuos_real": 51, "continuos_meta": 62, "total_real": 54, "total_meta": 62, "nuevos_pct": null, "continuos_pct": 0.8225806451612904, "total_pct": 0.8709677419354839, "gap": -8, "tier": "good"}, {"name": "Ingeniería de Sistemas", "nuevos_real": 63, "nuevos_meta": 110, "continuos_real": 540, "continuos_meta": 583, "total_real": 603, "total_meta": 693, "nuevos_pct": 0.5727272727272728, "continuos_pct": 0.9262435677530018, "total_pct": 0.8701298701298701, "gap": -90, "tier": "good"}, {"name": "Psicología", "nuevos_real": 0, "nuevos_meta": 38, "continuos_real": 412, "continuos_meta": 437, "total_real": 412, "total_meta": 475, "nuevos_pct": 0.0, "continuos_pct": 0.9427917620137299, "total_pct": 0.8673684210526316, "gap": -63, "tier": "good"}, {"name": "Contaduría Pública", "nuevos_real": 36, "nuevos_meta": 80, "continuos_real": 297, "continuos_meta": 313, "total_real": 333, "total_meta": 393, "nuevos_pct": 0.45, "continuos_pct": 0.9488817891373802, "total_pct": 0.8473282442748091, "gap": -60, "tier": "good"}, {"name": "Ingeniería Industrial", "nuevos_real": 11, "nuevos_meta": 25, "continuos_real": 110, "continuos_meta": 120, "total_real": 121, "total_meta": 145, "nuevos_pct": 0.44, "continuos_pct": 0.9166666666666666, "total_pct": 0.8344827586206897, "gap": -24, "tier": "good"}, {"name": "Licenciatura en Lenguas Extranjeras con Énfasis en Inglés", "nuevos_real": 26, "nuevos_meta": 35, "continuos_real": 141, "continuos_meta": 166, "total_real": 167, "total_meta": 201, "nuevos_pct": 0.7428571428571429, "continuos_pct": 0.8493975903614458, "total_pct": 0.8308457711442786, "gap": -34, "tier": "good"}, {"name": "Ingeniería Electrónica", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 39, "continuos_meta": 55, "total_real": 39, "total_meta": 55, "nuevos_pct": null, "continuos_pct": 0.7090909090909091, "total_pct": 0.7090909090909091, "gap": -16, "tier": "good"}, {"name": "Especialización en Seguridad Industrial e Higiene Laboral", "nuevos_real": 10, "nuevos_meta": 19, "continuos_real": 0, "continuos_meta": 15, "total_real": 10, "total_meta": 34, "nuevos_pct": 0.5263157894736842, "continuos_pct": 0.0, "total_pct": 0.29411764705882354, "gap": -24, "tier": "warning"}, {"name": "Tecnología en Redes de Computadores y Seguridad Informática", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 1, "total_real": 0, "total_meta": 1, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -1, "tier": "critical"}, {"name": "Derecho", "nuevos_real": 10, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 10, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 10, "tier": "good"}]}, {"id": "CU Zipaquirá", "label": "CU Zipaquirá", "totals": {"nuevos_real": 154, "nuevos_meta": 165, "continuos_real": 844, "continuos_meta": 1120, "total_real": 998, "total_meta": 1285, "nuevos_pct": 0.9333333333333333, "continuos_pct": 0.7535714285714286, "total_pct": 0.7766536964980545, "gap": -287, "tier": "good"}, "programs": [{"name": "Diseño Gráfico", "nuevos_real": 24, "nuevos_meta": 0, "continuos_real": 40, "continuos_meta": 19, "total_real": 64, "total_meta": 19, "nuevos_pct": null, "continuos_pct": 2.1052631578947367, "total_pct": 3.3684210526315788, "gap": 45, "tier": "good"}, {"name": "Administración de Empresas", "nuevos_real": 7, "nuevos_meta": 0, "continuos_real": 61, "continuos_meta": 62, "total_real": 68, "total_meta": 62, "nuevos_pct": null, "continuos_pct": 0.9838709677419355, "total_pct": 1.096774193548387, "gap": 6, "tier": "good"}, {"name": "Trabajo Social", "nuevos_real": 5, "nuevos_meta": 0, "continuos_real": 65, "continuos_meta": 73, "total_real": 70, "total_meta": 73, "nuevos_pct": null, "continuos_pct": 0.8904109589041096, "total_pct": 0.958904109589041, "gap": -3, "tier": "good"}, {"name": "Ingeniería de Sistemas", "nuevos_real": 39, "nuevos_meta": 30, "continuos_real": 205, "continuos_meta": 247, "total_real": 244, "total_meta": 277, "nuevos_pct": 1.3, "continuos_pct": 0.8299595141700404, "total_pct": 0.8808664259927798, "gap": -33, "tier": "good"}, {"name": "Ingeniería Industrial", "nuevos_real": 15, "nuevos_meta": 0, "continuos_real": 108, "continuos_meta": 140, "total_real": 123, "total_meta": 140, "nuevos_pct": null, "continuos_pct": 0.7714285714285715, "total_pct": 0.8785714285714286, "gap": -17, "tier": "good"}, {"name": "Licenciatura en Educación Infantil", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 54, "continuos_meta": 70, "total_real": 54, "total_meta": 70, "nuevos_pct": null, "continuos_pct": 0.7714285714285715, "total_pct": 0.7714285714285715, "gap": -16, "tier": "good"}, {"name": "Administración Deportiva", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 10, "continuos_meta": 13, "total_real": 10, "total_meta": 13, "nuevos_pct": null, "continuos_pct": 0.7692307692307693, "total_pct": 0.7692307692307693, "gap": -3, "tier": "good"}, {"name": "Comunicación Social - Periodismo", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 65, "continuos_meta": 86, "total_real": 65, "total_meta": 86, "nuevos_pct": null, "continuos_pct": 0.7558139534883721, "total_pct": 0.7558139534883721, "gap": -21, "tier": "good"}, {"name": "Ingeniería Civil", "nuevos_real": 13, "nuevos_meta": 20, "continuos_real": 111, "continuos_meta": 158, "total_real": 124, "total_meta": 178, "nuevos_pct": 0.65, "continuos_pct": 0.7025316455696202, "total_pct": 0.6966292134831461, "gap": -54, "tier": "good"}, {"name": "Especialización en Seguridad Industrial e Higiene Laboral", "nuevos_real": 4, "nuevos_meta": 15, "continuos_real": 7, "continuos_meta": 1, "total_real": 11, "total_meta": 16, "nuevos_pct": 0.26666666666666666, "continuos_pct": 7.0, "total_pct": 0.6875, "gap": -5, "tier": "good"}, {"name": "Ingeniería Agroecológica", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 44, "continuos_meta": 68, "total_real": 44, "total_meta": 68, "nuevos_pct": null, "continuos_pct": 0.6470588235294118, "total_pct": 0.6470588235294118, "gap": -24, "tier": "good"}, {"name": "Especialización en Suelos y Nutrición Vegetal", "nuevos_real": 18, "nuevos_meta": 20, "continuos_real": 14, "continuos_meta": 33, "total_real": 32, "total_meta": 53, "nuevos_pct": 0.9, "continuos_pct": 0.42424242424242425, "total_pct": 0.6037735849056604, "gap": -21, "tier": "good"}, {"name": "Tecnología en Comunicación Gráfica", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 17, "continuos_meta": 31, "total_real": 17, "total_meta": 31, "nuevos_pct": null, "continuos_pct": 0.5483870967741935, "total_pct": 0.5483870967741935, "gap": -14, "tier": "good"}, {"name": "Contaduría Pública", "nuevos_real": 21, "nuevos_meta": 35, "continuos_real": 43, "continuos_meta": 91, "total_real": 64, "total_meta": 126, "nuevos_pct": 0.6, "continuos_pct": 0.4725274725274725, "total_pct": 0.5079365079365079, "gap": -62, "tier": "good"}, {"name": "Especialización en Atención a la Primera Infancia", "nuevos_real": 0, "nuevos_meta": 15, "continuos_real": 0, "continuos_meta": 1, "total_real": 0, "total_meta": 16, "nuevos_pct": 0.0, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -16, "tier": "critical"}, {"name": "Especialización en Gerencia de Proyectos", "nuevos_real": 0, "nuevos_meta": 30, "continuos_real": 0, "continuos_meta": 27, "total_real": 0, "total_meta": 57, "nuevos_pct": 0.0, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -57, "tier": "critical"}, {"name": "Derecho", "nuevos_real": 8, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 8, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 8, "tier": "good"}]}, {"id": "CU Madrid", "label": "CU Madrid", "totals": {"nuevos_real": 40, "nuevos_meta": 99, "continuos_real": 318, "continuos_meta": 400, "total_real": 358, "total_meta": 499, "nuevos_pct": 0.40404040404040403, "continuos_pct": 0.795, "total_pct": 0.717434869739479, "gap": -141, "tier": "good"}, "programs": [{"name": "Ingeniería de Sistemas", "nuevos_real": 14, "nuevos_meta": 40, "continuos_real": 170, "continuos_meta": 197, "total_real": 184, "total_meta": 237, "nuevos_pct": 0.35, "continuos_pct": 0.8629441624365483, "total_pct": 0.7763713080168776, "gap": -53, "tier": "good"}, {"name": "Licenciatura en Lenguas Extranjeras con Énfasis en Inglés", "nuevos_real": 17, "nuevos_meta": 40, "continuos_real": 108, "continuos_meta": 130, "total_real": 125, "total_meta": 170, "nuevos_pct": 0.425, "continuos_pct": 0.8307692307692308, "total_pct": 0.7352941176470589, "gap": -45, "tier": "good"}, {"name": "Trabajo Social", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 14, "continuos_meta": 21, "total_real": 14, "total_meta": 21, "nuevos_pct": null, "continuos_pct": 0.6666666666666666, "total_pct": 0.6666666666666666, "gap": -7, "tier": "good"}, {"name": "Contaduría Pública", "nuevos_real": 9, "nuevos_meta": 19, "continuos_real": 26, "continuos_meta": 41, "total_real": 35, "total_meta": 60, "nuevos_pct": 0.47368421052631576, "continuos_pct": 0.6341463414634146, "total_pct": 0.5833333333333334, "gap": -25, "tier": "good"}, {"name": "Administración de Empresas", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 1, "total_real": 0, "total_meta": 1, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -1, "tier": "critical"}, {"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 6, "total_real": 0, "total_meta": 6, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -6, "tier": "critical"}, {"name": "Especialización en Big Data", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 1, "total_real": 0, "total_meta": 1, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -1, "tier": "critical"}, {"name": "Tecnología en Logística Empresarial", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 3, "total_real": 0, "total_meta": 3, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -3, "tier": "critical"}]}, {"id": "CU Girardot", "label": "CU Girardot", "totals": {"nuevos_real": 118, "nuevos_meta": 173, "continuos_real": 678, "continuos_meta": 968, "total_real": 796, "total_meta": 1141, "nuevos_pct": 0.6820809248554913, "continuos_pct": 0.7004132231404959, "total_pct": 0.6976336546888694, "gap": -345, "tier": "good"}, "programs": [{"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 9, "continuos_meta": 3, "total_real": 9, "total_meta": 3, "nuevos_pct": null, "continuos_pct": 3.0, "total_pct": 3.0, "gap": 6, "tier": "good"}, {"name": "Diseño Gráfico", "nuevos_real": 10, "nuevos_meta": 15, "continuos_real": 26, "continuos_meta": 14, "total_real": 36, "total_meta": 29, "nuevos_pct": 0.6666666666666666, "continuos_pct": 1.8571428571428572, "total_pct": 1.2413793103448276, "gap": 7, "tier": "good"}, {"name": "Administración de Empresas", "nuevos_real": 9, "nuevos_meta": 0, "continuos_real": 58, "continuos_meta": 73, "total_real": 67, "total_meta": 73, "nuevos_pct": null, "continuos_pct": 0.7945205479452054, "total_pct": 0.9178082191780822, "gap": -6, "tier": "good"}, {"name": "Licenciatura en Educación Infantil", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 18, "continuos_meta": 21, "total_real": 18, "total_meta": 21, "nuevos_pct": null, "continuos_pct": 0.8571428571428571, "total_pct": 0.8571428571428571, "gap": -3, "tier": "good"}, {"name": "Ingeniería de Sistemas", "nuevos_real": 16, "nuevos_meta": 25, "continuos_real": 150, "continuos_meta": 186, "total_real": 166, "total_meta": 211, "nuevos_pct": 0.64, "continuos_pct": 0.8064516129032258, "total_pct": 0.7867298578199052, "gap": -45, "tier": "good"}, {"name": "Ingeniería Industrial", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 57, "continuos_meta": 73, "total_real": 57, "total_meta": 73, "nuevos_pct": null, "continuos_pct": 0.7808219178082192, "total_pct": 0.7808219178082192, "gap": -16, "tier": "good"}, {"name": "Licenciatura en Lenguas Extranjeras con Énfasis en Inglés", "nuevos_real": 12, "nuevos_meta": 20, "continuos_real": 131, "continuos_meta": 170, "total_real": 143, "total_meta": 190, "nuevos_pct": 0.6, "continuos_pct": 0.7705882352941177, "total_pct": 0.7526315789473684, "gap": -47, "tier": "good"}, {"name": "Ingeniería Civil", "nuevos_real": 21, "nuevos_meta": 26, "continuos_real": 91, "continuos_meta": 147, "total_real": 112, "total_meta": 173, "nuevos_pct": 0.8076923076923077, "continuos_pct": 0.6190476190476191, "total_pct": 0.6473988439306358, "gap": -61, "tier": "good"}, {"name": "Contaduría Pública", "nuevos_real": 17, "nuevos_meta": 18, "continuos_real": 65, "continuos_meta": 110, "total_real": 82, "total_meta": 128, "nuevos_pct": 0.9444444444444444, "continuos_pct": 0.5909090909090909, "total_pct": 0.640625, "gap": -46, "tier": "good"}, {"name": "Trabajo Social", "nuevos_real": 11, "nuevos_meta": 17, "continuos_real": 63, "continuos_meta": 99, "total_real": 74, "total_meta": 116, "nuevos_pct": 0.6470588235294118, "continuos_pct": 0.6363636363636364, "total_pct": 0.6379310344827587, "gap": -42, "tier": "good"}, {"name": "Comunicación Social y Periodismo", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 5, "continuos_meta": 16, "total_real": 5, "total_meta": 16, "nuevos_pct": null, "continuos_pct": 0.3125, "total_pct": 0.3125, "gap": -11, "tier": "warning"}, {"name": "Especialización en Seguridad Industrial e Higiene Laboral", "nuevos_real": 9, "nuevos_meta": 17, "continuos_real": 5, "continuos_meta": 29, "total_real": 14, "total_meta": 46, "nuevos_pct": 0.5294117647058824, "continuos_pct": 0.1724137931034483, "total_pct": 0.30434782608695654, "gap": -32, "tier": "warning"}, {"name": "Administración Deportiva", "nuevos_real": 1, "nuevos_meta": 20, "continuos_real": 0, "continuos_meta": 18, "total_real": 1, "total_meta": 38, "nuevos_pct": 0.05, "continuos_pct": 0.0, "total_pct": 0.02631578947368421, "gap": -37, "tier": "critical"}, {"name": "Administración en Salud Ocupacional", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 1, "total_real": 0, "total_meta": 1, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -1, "tier": "critical"}, {"name": "Especialización en Ciberseguridad", "nuevos_real": 0, "nuevos_meta": 15, "continuos_real": 0, "continuos_meta": 0, "total_real": 0, "total_meta": 15, "nuevos_pct": 0.0, "continuos_pct": null, "total_pct": 0.0, "gap": -15, "tier": "critical"}, {"name": "Especialización en Patología e Intervención de las Construcciones", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 6, "total_real": 0, "total_meta": 6, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -6, "tier": "critical"}, {"name": "Psicología", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 2, "total_real": 0, "total_meta": 2, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -2, "tier": "critical"}, {"name": "Derecho", "nuevos_real": 12, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 12, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 12, "tier": "good"}]}, {"id": "CU Duitama", "label": "CU Duitama", "totals": {"nuevos_real": 26, "nuevos_meta": 30, "continuos_real": 11, "continuos_meta": 33, "total_real": 37, "total_meta": 63, "nuevos_pct": 0.8666666666666667, "continuos_pct": 0.3333333333333333, "total_pct": 0.5873015873015873, "gap": -26, "tier": "good"}, "programs": [{"name": "Especialización en Suelos y Nutrición Vegetal", "nuevos_real": 12, "nuevos_meta": 0, "continuos_real": 11, "continuos_meta": 13, "total_real": 23, "total_meta": 13, "nuevos_pct": null, "continuos_pct": 0.8461538461538461, "total_pct": 1.7692307692307692, "gap": 10, "tier": "good"}, {"name": "Maestría en Gerencia de la Innovación en Proyectos", "nuevos_real": 11, "nuevos_meta": 15, "continuos_real": 0, "continuos_meta": 0, "total_real": 11, "total_meta": 15, "nuevos_pct": 0.7333333333333333, "continuos_pct": null, "total_pct": 0.7333333333333333, "gap": -4, "tier": "good"}, {"name": "Especialización en Gestión del Desarrollo Territorial", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 8, "total_real": 0, "total_meta": 8, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -8, "tier": "critical"}, {"name": "Especialización en Políticas Públicas y Bienestar Social", "nuevos_real": 0, "nuevos_meta": 15, "continuos_real": 0, "continuos_meta": 12, "total_real": 0, "total_meta": 27, "nuevos_pct": 0.0, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -27, "tier": "critical"}, {"name": "Derecho", "nuevos_real": 2, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 2, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 2, "tier": "good"}, {"name": "Maestría en Ambientes de Aprendizaje", "nuevos_real": 1, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 1, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 1, "tier": "good"}]}, {"id": "CT La Mesa", "label": "CT La Mesa", "totals": {"nuevos_real": 9, "nuevos_meta": 33, "continuos_real": 35, "continuos_meta": 56, "total_real": 44, "total_meta": 89, "nuevos_pct": 0.2727272727272727, "continuos_pct": 0.625, "total_pct": 0.4943820224719101, "gap": -45, "tier": "warning"}, "programs": [{"name": "Contaduría Pública", "nuevos_real": 6, "nuevos_meta": 18, "continuos_real": 29, "continuos_meta": 43, "total_real": 35, "total_meta": 61, "nuevos_pct": 0.3333333333333333, "continuos_pct": 0.6744186046511628, "total_pct": 0.5737704918032787, "gap": -26, "tier": "good"}, {"name": "Especialización en Seguridad Industrial e Higiene Laboral", "nuevos_real": 3, "nuevos_meta": 15, "continuos_real": 4, "continuos_meta": 0, "total_real": 7, "total_meta": 15, "nuevos_pct": 0.2, "continuos_pct": null, "total_pct": 0.4666666666666667, "gap": -8, "tier": "warning"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 2, "continuos_meta": 13, "total_real": 2, "total_meta": 13, "nuevos_pct": null, "continuos_pct": 0.15384615384615385, "total_pct": 0.15384615384615385, "gap": -11, "tier": "critical"}]}, {"id": "CT Fusagasugá", "label": "CT Fusagasugá", "totals": {"nuevos_real": 13, "nuevos_meta": 34, "continuos_real": 7, "continuos_meta": 18, "total_real": 20, "total_meta": 52, "nuevos_pct": 0.38235294117647056, "continuos_pct": 0.3888888888888889, "total_pct": 0.38461538461538464, "gap": -32, "tier": "warning"}, "programs": [{"name": "Especialización en Atención a la Primera Infancia", "nuevos_real": 1, "nuevos_meta": 17, "continuos_real": 0, "continuos_meta": 18, "total_real": 1, "total_meta": 35, "nuevos_pct": 0.058823529411764705, "continuos_pct": 0.0, "total_pct": 0.02857142857142857, "gap": -34, "tier": "critical"}, {"name": "Especialización en Seguridad Industrial e Higiene Laboral", "nuevos_real": 0, "nuevos_meta": 17, "continuos_real": 0, "continuos_meta": 0, "total_real": 0, "total_meta": 17, "nuevos_pct": 0.0, "continuos_pct": null, "total_pct": 0.0, "gap": -17, "tier": "critical"}, {"name": "Diseño Gráfico", "nuevos_real": 1, "nuevos_meta": 0, "continuos_real": 7, "continuos_meta": 0, "total_real": 8, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 8, "tier": "good"}, {"name": "Especialización en Ciberseguridad", "nuevos_real": 5, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 5, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 5, "tier": "good"}, {"name": "Trabajo Social", "nuevos_real": 6, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 6, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 6, "tier": "good"}]}, {"id": "CT Villeta", "label": "CT Villeta", "totals": {"nuevos_real": 4, "nuevos_meta": 15, "continuos_real": 14, "continuos_meta": 32, "total_real": 18, "total_meta": 47, "nuevos_pct": 0.26666666666666666, "continuos_pct": 0.4375, "total_pct": 0.3829787234042553, "gap": -29, "tier": "warning"}, "programs": [{"name": "Contaduría Pública", "nuevos_real": 4, "nuevos_meta": 15, "continuos_real": 14, "continuos_meta": 30, "total_real": 18, "total_meta": 45, "nuevos_pct": 0.26666666666666666, "continuos_pct": 0.4666666666666667, "total_pct": 0.4, "gap": -27, "tier": "warning"}, {"name": "Administración de Empresas", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 2, "total_real": 0, "total_meta": 2, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -2, "tier": "critical"}]}, {"id": "CU Chiquinquirá", "label": "CU Chiquinquirá", "totals": {"nuevos_real": 17, "nuevos_meta": 31, "continuos_real": 0, "continuos_meta": 14, "total_real": 17, "total_meta": 45, "nuevos_pct": 0.5483870967741935, "continuos_pct": 0.0, "total_pct": 0.37777777777777777, "gap": -28, "tier": "warning"}, "programs": [{"name": "Especialización en Suelos y Nutrición Vegetal", "nuevos_real": 1, "nuevos_meta": 16, "continuos_real": 0, "continuos_meta": 14, "total_real": 1, "total_meta": 30, "nuevos_pct": 0.0625, "continuos_pct": 0.0, "total_pct": 0.03333333333333333, "gap": -29, "tier": "critical"}, {"name": "Especialización en Gestión del Desarrollo Territorial", "nuevos_real": 0, "nuevos_meta": 15, "continuos_real": 0, "continuos_meta": 0, "total_real": 0, "total_meta": 15, "nuevos_pct": 0.0, "continuos_pct": null, "total_pct": 0.0, "gap": -15, "tier": "critical"}, {"name": "Especialización en Gerencia de Proyectos", "nuevos_real": 8, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 8, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 8, "tier": "good"}, {"name": "Maestría en Gerencia de la Innovación en Proyectos", "nuevos_real": 8, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 8, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 8, "tier": "good"}]}, {"id": "CT Ubaté", "label": "CT Ubaté", "totals": {"nuevos_real": 4, "nuevos_meta": 25, "continuos_real": 14, "continuos_meta": 40, "total_real": 18, "total_meta": 65, "nuevos_pct": 0.16, "continuos_pct": 0.35, "total_pct": 0.27692307692307694, "gap": -47, "tier": "warning"}, "programs": [{"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 4, "continuos_meta": 10, "total_real": 4, "total_meta": 10, "nuevos_pct": null, "continuos_pct": 0.4, "total_pct": 0.4, "gap": -6, "tier": "warning"}, {"name": "Contaduría Pública", "nuevos_real": 4, "nuevos_meta": 25, "continuos_real": 10, "continuos_meta": 30, "total_real": 14, "total_meta": 55, "nuevos_pct": 0.16, "continuos_pct": 0.3333333333333333, "total_pct": 0.2545454545454545, "gap": -41, "tier": "warning"}]}, {"id": "CT Facatativá", "label": "CT Facatativá", "totals": {"nuevos_real": 0, "nuevos_meta": 19, "continuos_real": 8, "continuos_meta": 33, "total_real": 8, "total_meta": 52, "nuevos_pct": 0.0, "continuos_pct": 0.24242424242424243, "total_pct": 0.15384615384615385, "gap": -44, "tier": "critical"}, "programs": [{"name": "Especialización en Seguridad Industrial e Higiene Laboral", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 8, "continuos_meta": 14, "total_real": 8, "total_meta": 14, "nuevos_pct": null, "continuos_pct": 0.5714285714285714, "total_pct": 0.5714285714285714, "gap": -6, "tier": "good"}, {"name": "Administración en Salud Ocupacional", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 1, "total_real": 0, "total_meta": 1, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -1, "tier": "critical"}, {"name": "Contaduría Pública", "nuevos_real": 0, "nuevos_meta": 19, "continuos_real": 0, "continuos_meta": 18, "total_real": 0, "total_meta": 37, "nuevos_pct": 0.0, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -37, "tier": "critical"}]}, {"id": "CT Funza", "label": "CT Funza", "totals": {"nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 2, "total_real": 0, "total_meta": 2, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -2, "tier": "critical"}, "programs": [{"name": "Administración de Empresas", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 1, "total_real": 0, "total_meta": 1, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -1, "tier": "critical"}]}]}, "q3": {"cutoff": "30/07/2026", "total": {"nuevos_real": 143, "nuevos_meta": 694, "continuos_real": 701, "continuos_meta": 2147, "total_real": 844, "total_meta": 2841, "nuevos_pct": 0.20605187319884727, "continuos_pct": 0.3265020959478342, "total_pct": 0.29707849348820836, "gap": -1997, "tier": "warning"}, "groups": [{"id": "CT La Mesa", "label": "CT La Mesa", "totals": {"nuevos_real": 7, "nuevos_meta": 20, "continuos_real": 29, "continuos_meta": 61, "total_real": 36, "total_meta": 81, "nuevos_pct": 0.35, "continuos_pct": 0.47540983606557374, "total_pct": 0.4444444444444444, "gap": -45, "tier": "warning"}, "programs": [{"name": "Contaduría Pública", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 10, "continuos_meta": 7, "total_real": 10, "total_meta": 7, "nuevos_pct": null, "continuos_pct": 1.4285714285714286, "total_pct": 1.4285714285714286, "gap": 3, "tier": "good"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 4, "nuevos_meta": 0, "continuos_real": 15, "continuos_meta": 35, "total_real": 19, "total_meta": 35, "nuevos_pct": null, "continuos_pct": 0.42857142857142855, "total_pct": 0.5428571428571428, "gap": -16, "tier": "good"}, {"name": "Ingeniería de Sistemas", "nuevos_real": 3, "nuevos_meta": 20, "continuos_real": 4, "continuos_meta": 19, "total_real": 7, "total_meta": 39, "nuevos_pct": 0.15, "continuos_pct": 0.21052631578947367, "total_pct": 0.1794871794871795, "gap": -32, "tier": "critical"}]}, {"id": "CU Zipaquirá", "label": "CU Zipaquirá", "totals": {"nuevos_real": 37, "nuevos_meta": 75, "continuos_real": 194, "continuos_meta": 459, "total_real": 231, "total_meta": 534, "nuevos_pct": 0.49333333333333335, "continuos_pct": 0.4226579520697168, "total_pct": 0.43258426966292135, "gap": -303, "tier": "warning"}, "programs": [{"name": "Licenciatura en Educación Infantil", "nuevos_real": 3, "nuevos_meta": 20, "continuos_real": 44, "continuos_meta": 73, "total_real": 47, "total_meta": 93, "nuevos_pct": 0.15, "continuos_pct": 0.6027397260273972, "total_pct": 0.5053763440860215, "gap": -46, "tier": "good"}, {"name": "Administración de Empresas", "nuevos_real": 17, "nuevos_meta": 20, "continuos_real": 39, "continuos_meta": 97, "total_real": 56, "total_meta": 117, "nuevos_pct": 0.85, "continuos_pct": 0.4020618556701031, "total_pct": 0.47863247863247865, "gap": -61, "tier": "warning"}, {"name": "Contaduría Pública", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 36, "continuos_meta": 79, "total_real": 36, "total_meta": 79, "nuevos_pct": null, "continuos_pct": 0.45569620253164556, "total_pct": 0.45569620253164556, "gap": -43, "tier": "warning"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 17, "nuevos_meta": 20, "continuos_real": 72, "continuos_meta": 185, "total_real": 89, "total_meta": 205, "nuevos_pct": 0.85, "continuos_pct": 0.3891891891891892, "total_pct": 0.43414634146341463, "gap": -116, "tier": "warning"}, {"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 2, "continuos_meta": 7, "total_real": 2, "total_meta": 7, "nuevos_pct": null, "continuos_pct": 0.2857142857142857, "total_pct": 0.2857142857142857, "gap": -5, "tier": "warning"}, {"name": "Administración de Empresas Turísticas y Hoteleras", "nuevos_real": 0, "nuevos_meta": 15, "continuos_real": 1, "continuos_meta": 18, "total_real": 1, "total_meta": 33, "nuevos_pct": 0.0, "continuos_pct": 0.05555555555555555, "total_pct": 0.030303030303030304, "gap": -32, "tier": "critical"}]}, {"id": "CU Soacha", "label": "CU Soacha", "totals": {"nuevos_real": 31, "nuevos_meta": 95, "continuos_real": 164, "continuos_meta": 413, "total_real": 195, "total_meta": 508, "nuevos_pct": 0.3263157894736842, "continuos_pct": 0.39709443099273606, "total_pct": 0.3838582677165354, "gap": -313, "tier": "warning"}, "programs": [{"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 16, "continuos_meta": 26, "total_real": 16, "total_meta": 26, "nuevos_pct": null, "continuos_pct": 0.6153846153846154, "total_pct": 0.6153846153846154, "gap": -10, "tier": "good"}, {"name": "Administración de Empresas", "nuevos_real": 11, "nuevos_meta": 20, "continuos_real": 18, "continuos_meta": 28, "total_real": 29, "total_meta": 48, "nuevos_pct": 0.55, "continuos_pct": 0.6428571428571429, "total_pct": 0.6041666666666666, "gap": -19, "tier": "good"}, {"name": "Contaduría Pública", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 52, "continuos_meta": 116, "total_real": 52, "total_meta": 116, "nuevos_pct": null, "continuos_pct": 0.4482758620689655, "total_pct": 0.4482758620689655, "gap": -64, "tier": "warning"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 12, "nuevos_meta": 20, "continuos_real": 63, "continuos_meta": 162, "total_real": 75, "total_meta": 182, "nuevos_pct": 0.6, "continuos_pct": 0.3888888888888889, "total_pct": 0.41208791208791207, "gap": -107, "tier": "warning"}, {"name": "Licenciatura en Educación Infantil", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 2, "continuos_meta": 5, "total_real": 2, "total_meta": 5, "nuevos_pct": null, "continuos_pct": 0.4, "total_pct": 0.4, "gap": -3, "tier": "warning"}, {"name": "Licenciatura en Educación Física, Recreación y Deporte", "nuevos_real": 5, "nuevos_meta": 40, "continuos_real": 9, "continuos_meta": 34, "total_real": 14, "total_meta": 74, "nuevos_pct": 0.125, "continuos_pct": 0.2647058823529412, "total_pct": 0.1891891891891892, "gap": -60, "tier": "critical"}, {"name": "Especialización en Gerencia de Proyectos", "nuevos_real": 3, "nuevos_meta": 15, "continuos_real": 4, "continuos_meta": 42, "total_real": 7, "total_meta": 57, "nuevos_pct": 0.2, "continuos_pct": 0.09523809523809523, "total_pct": 0.12280701754385964, "gap": -50, "tier": "critical"}]}, {"id": "CU Madrid", "label": "CU Madrid", "totals": {"nuevos_real": 15, "nuevos_meta": 75, "continuos_real": 65, "continuos_meta": 211, "total_real": 80, "total_meta": 286, "nuevos_pct": 0.2, "continuos_pct": 0.3080568720379147, "total_pct": 0.27972027972027974, "gap": -206, "tier": "warning"}, "programs": [{"name": "Ingeniería Industrial", "nuevos_real": 5, "nuevos_meta": 20, "continuos_real": 11, "continuos_meta": 18, "total_real": 16, "total_meta": 38, "nuevos_pct": 0.25, "continuos_pct": 0.6111111111111112, "total_pct": 0.42105263157894735, "gap": -22, "tier": "warning"}, {"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 5, "continuos_meta": 12, "total_real": 5, "total_meta": 12, "nuevos_pct": null, "continuos_pct": 0.4166666666666667, "total_pct": 0.4166666666666667, "gap": -7, "tier": "warning"}, {"name": "Especialización en Gerencia Tributaria", "nuevos_real": 5, "nuevos_meta": 15, "continuos_real": 0, "continuos_meta": 0, "total_real": 5, "total_meta": 15, "nuevos_pct": 0.3333333333333333, "continuos_pct": null, "total_pct": 0.3333333333333333, "gap": -10, "tier": "warning"}, {"name": "Administración de Empresas", "nuevos_real": 2, "nuevos_meta": 20, "continuos_real": 29, "continuos_meta": 83, "total_real": 31, "total_meta": 103, "nuevos_pct": 0.1, "continuos_pct": 0.3493975903614458, "total_pct": 0.30097087378640774, "gap": -72, "tier": "warning"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 3, "nuevos_meta": 20, "continuos_real": 20, "continuos_meta": 97, "total_real": 23, "total_meta": 117, "nuevos_pct": 0.15, "continuos_pct": 0.20618556701030927, "total_pct": 0.19658119658119658, "gap": -94, "tier": "critical"}, {"name": "Comunicación Social", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 1, "total_real": 0, "total_meta": 1, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -1, "tier": "critical"}]}, {"id": "CT Funza", "label": "CT Funza", "totals": {"nuevos_real": 8, "nuevos_meta": 49, "continuos_real": 38, "continuos_meta": 117, "total_real": 46, "total_meta": 166, "nuevos_pct": 0.16326530612244897, "continuos_pct": 0.3247863247863248, "total_pct": 0.27710843373493976, "gap": -120, "tier": "warning"}, "programs": [{"name": "Administración de Empresas", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 24, "continuos_meta": 51, "total_real": 24, "total_meta": 51, "nuevos_pct": null, "continuos_pct": 0.47058823529411764, "total_pct": 0.47058823529411764, "gap": -27, "tier": "warning"}, {"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 6, "continuos_meta": 14, "total_real": 6, "total_meta": 14, "nuevos_pct": null, "continuos_pct": 0.42857142857142855, "total_pct": 0.42857142857142855, "gap": -8, "tier": "warning"}, {"name": "Licenciatura en Educación Física, Recreación y Deporte", "nuevos_real": 5, "nuevos_meta": 17, "continuos_real": 6, "continuos_meta": 17, "total_real": 11, "total_meta": 34, "nuevos_pct": 0.29411764705882354, "continuos_pct": 0.35294117647058826, "total_pct": 0.3235294117647059, "gap": -23, "tier": "warning"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 1, "nuevos_meta": 15, "continuos_real": 2, "continuos_meta": 20, "total_real": 3, "total_meta": 35, "nuevos_pct": 0.06666666666666667, "continuos_pct": 0.1, "total_pct": 0.08571428571428572, "gap": -32, "tier": "critical"}, {"name": "Licenciatura en Educación Infantil", "nuevos_real": 2, "nuevos_meta": 17, "continuos_real": 0, "continuos_meta": 15, "total_real": 2, "total_meta": 32, "nuevos_pct": 0.11764705882352941, "continuos_pct": 0.0, "total_pct": 0.0625, "gap": -30, "tier": "critical"}]}, {"id": "CU Girardot", "label": "CU Girardot", "totals": {"nuevos_real": 9, "nuevos_meta": 50, "continuos_real": 68, "continuos_meta": 242, "total_real": 77, "total_meta": 292, "nuevos_pct": 0.18, "continuos_pct": 0.2809917355371901, "total_pct": 0.2636986301369863, "gap": -215, "tier": "warning"}, "programs": [{"name": "Contaduría Pública", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 22, "continuos_meta": 47, "total_real": 22, "total_meta": 47, "nuevos_pct": null, "continuos_pct": 0.46808510638297873, "total_pct": 0.46808510638297873, "gap": -25, "tier": "warning"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 7, "nuevos_meta": 20, "continuos_real": 43, "continuos_meta": 135, "total_real": 50, "total_meta": 155, "nuevos_pct": 0.35, "continuos_pct": 0.31851851851851853, "total_pct": 0.3225806451612903, "gap": -105, "tier": "warning"}, {"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 3, "continuos_meta": 18, "total_real": 3, "total_meta": 18, "nuevos_pct": null, "continuos_pct": 0.16666666666666666, "total_pct": 0.16666666666666666, "gap": -15, "tier": "critical"}, {"name": "Especialización en Gerencia Tributaria", "nuevos_real": 2, "nuevos_meta": 30, "continuos_real": 0, "continuos_meta": 42, "total_real": 2, "total_meta": 72, "nuevos_pct": 0.06666666666666667, "continuos_pct": 0.0, "total_pct": 0.027777777777777776, "gap": -70, "tier": "critical"}]}, {"id": "CT Ubaté", "label": "CT Ubaté", "totals": {"nuevos_real": 4, "nuevos_meta": 25, "continuos_real": 37, "continuos_meta": 131, "total_real": 41, "total_meta": 156, "nuevos_pct": 0.16, "continuos_pct": 0.2824427480916031, "total_pct": 0.26282051282051283, "gap": -115, "tier": "warning"}, "programs": [{"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 4, "nuevos_meta": 25, "continuos_real": 33, "continuos_meta": 115, "total_real": 37, "total_meta": 140, "nuevos_pct": 0.16, "continuos_pct": 0.28695652173913044, "total_pct": 0.2642857142857143, "gap": -103, "tier": "warning"}, {"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 4, "continuos_meta": 16, "total_real": 4, "total_meta": 16, "nuevos_pct": null, "continuos_pct": 0.25, "total_pct": 0.25, "gap": -12, "tier": "warning"}]}, {"id": "CT Facatativá", "label": "CT Facatativá", "totals": {"nuevos_real": 7, "nuevos_meta": 92, "continuos_real": 62, "continuos_meta": 194, "total_real": 69, "total_meta": 286, "nuevos_pct": 0.07608695652173914, "continuos_pct": 0.31958762886597936, "total_pct": 0.24125874125874125, "gap": -217, "tier": "critical"}, "programs": [{"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 2, "nuevos_meta": 20, "continuos_real": 41, "continuos_meta": 91, "total_real": 43, "total_meta": 111, "nuevos_pct": 0.1, "continuos_pct": 0.45054945054945056, "total_pct": 0.38738738738738737, "gap": -68, "tier": "warning"}, {"name": "Administración de Empresas", "nuevos_real": 4, "nuevos_meta": 20, "continuos_real": 15, "continuos_meta": 57, "total_real": 19, "total_meta": 77, "nuevos_pct": 0.2, "continuos_pct": 0.2631578947368421, "total_pct": 0.24675324675324675, "gap": -58, "tier": "critical"}, {"name": "Licenciatura en Educación Infantil", "nuevos_real": 0, "nuevos_meta": 17, "continuos_real": 2, "continuos_meta": 15, "total_real": 2, "total_meta": 32, "nuevos_pct": 0.0, "continuos_pct": 0.13333333333333333, "total_pct": 0.0625, "gap": -30, "tier": "critical"}, {"name": "Ingeniería de Sistemas", "nuevos_real": 1, "nuevos_meta": 20, "continuos_real": 1, "continuos_meta": 18, "total_real": 2, "total_meta": 38, "nuevos_pct": 0.05, "continuos_pct": 0.05555555555555555, "total_pct": 0.05263157894736842, "gap": -36, "tier": "critical"}, {"name": "Especialización en Gerencia Tributaria", "nuevos_real": 0, "nuevos_meta": 15, "continuos_real": 0, "continuos_meta": 13, "total_real": 0, "total_meta": 28, "nuevos_pct": 0.0, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -28, "tier": "critical"}, {"name": "Licenciatura en Educación Física, Recreación y Deporte", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 3, "continuos_meta": 0, "total_real": 3, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 3, "tier": "good"}]}, {"id": "CT Fusagasugá", "label": "CT Fusagasugá", "totals": {"nuevos_real": 8, "nuevos_meta": 45, "continuos_real": 11, "continuos_meta": 34, "total_real": 19, "total_meta": 79, "nuevos_pct": 0.17777777777777778, "continuos_pct": 0.3235294117647059, "total_pct": 0.24050632911392406, "gap": -60, "tier": "critical"}, "programs": [{"name": "Licenciatura en Educación Física, Recreación y Deporte", "nuevos_real": 8, "nuevos_meta": 20, "continuos_real": 6, "continuos_meta": 13, "total_real": 14, "total_meta": 33, "nuevos_pct": 0.4, "continuos_pct": 0.46153846153846156, "total_pct": 0.42424242424242425, "gap": -19, "tier": "warning"}, {"name": "Ingeniería de Sistemas", "nuevos_real": 0, "nuevos_meta": 25, "continuos_real": 0, "continuos_meta": 21, "total_real": 0, "total_meta": 46, "nuevos_pct": 0.0, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -46, "tier": "critical"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 5, "continuos_meta": 0, "total_real": 5, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 5, "tier": "good"}]}, {"id": "CT Villeta", "label": "CT Villeta", "totals": {"nuevos_real": 11, "nuevos_meta": 67, "continuos_real": 13, "continuos_meta": 112, "total_real": 24, "total_meta": 179, "nuevos_pct": 0.16417910447761194, "continuos_pct": 0.11607142857142858, "total_pct": 0.1340782122905028, "gap": -155, "tier": "critical"}, "programs": [{"name": "Contaduría Pública", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 5, "continuos_meta": 18, "total_real": 5, "total_meta": 18, "nuevos_pct": null, "continuos_pct": 0.2777777777777778, "total_pct": 0.2777777777777778, "gap": -13, "tier": "warning"}, {"name": "Ingeniería de Sistemas", "nuevos_real": 5, "nuevos_meta": 20, "continuos_real": 2, "continuos_meta": 20, "total_real": 7, "total_meta": 40, "nuevos_pct": 0.25, "continuos_pct": 0.1, "total_pct": 0.175, "gap": -33, "tier": "critical"}, {"name": "Administración de Empresas", "nuevos_real": 4, "nuevos_meta": 15, "continuos_real": 2, "continuos_meta": 33, "total_real": 6, "total_meta": 48, "nuevos_pct": 0.26666666666666666, "continuos_pct": 0.06060606060606061, "total_pct": 0.125, "gap": -42, "tier": "critical"}, {"name": "Licenciatura en Educación Infantil", "nuevos_real": 0, "nuevos_meta": 17, "continuos_real": 3, "continuos_meta": 22, "total_real": 3, "total_meta": 39, "nuevos_pct": 0.0, "continuos_pct": 0.13636363636363635, "total_pct": 0.07692307692307693, "gap": -36, "tier": "critical"}, {"name": "Especialización en Gerencia Tributaria", "nuevos_real": 0, "nuevos_meta": 15, "continuos_real": 0, "continuos_meta": 19, "total_real": 0, "total_meta": 34, "nuevos_pct": 0.0, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -34, "tier": "critical"}, {"name": "Administración Financiera", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 0, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 0, "tier": "good"}, {"name": "Licenciatura en Educación Física, Recreación y Deporte", "nuevos_real": 2, "nuevos_meta": 0, "continuos_real": 1, "continuos_meta": 0, "total_real": 3, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 3, "tier": "good"}]}, {"id": "CU Duitama", "label": "CU Duitama", "totals": {"nuevos_real": 3, "nuevos_meta": 50, "continuos_real": 15, "continuos_meta": 118, "total_real": 18, "total_meta": 168, "nuevos_pct": 0.06, "continuos_pct": 0.1271186440677966, "total_pct": 0.10714285714285714, "gap": -150, "tier": "critical"}, "programs": [{"name": "Especialización en Gerencia en Riesgos Laborales, Seguridad y Salud en el Trabajo", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 7, "continuos_meta": 14, "total_real": 7, "total_meta": 14, "nuevos_pct": null, "continuos_pct": 0.5, "total_pct": 0.5, "gap": -7, "tier": "good"}, {"name": "Especialización en Gerencia de Proyectos", "nuevos_real": 0, "nuevos_meta": 15, "continuos_real": 4, "continuos_meta": 15, "total_real": 4, "total_meta": 30, "nuevos_pct": 0.0, "continuos_pct": 0.26666666666666666, "total_pct": 0.13333333333333333, "gap": -26, "tier": "critical"}, {"name": "Ingeniería de Sistemas", "nuevos_real": 0, "nuevos_meta": 17, "continuos_real": 3, "continuos_meta": 16, "total_real": 3, "total_meta": 33, "nuevos_pct": 0.0, "continuos_pct": 0.1875, "total_pct": 0.09090909090909091, "gap": -30, "tier": "critical"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 3, "nuevos_meta": 18, "continuos_real": 0, "continuos_meta": 17, "total_real": 3, "total_meta": 35, "nuevos_pct": 0.16666666666666666, "continuos_pct": 0.0, "total_pct": 0.08571428571428572, "gap": -32, "tier": "critical"}, {"name": "Trabajo Social", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 1, "continuos_meta": 19, "total_real": 1, "total_meta": 19, "nuevos_pct": null, "continuos_pct": 0.05263157894736842, "total_pct": 0.05263157894736842, "gap": -18, "tier": "critical"}, {"name": "Ingeniería Industrial", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 37, "total_real": 0, "total_meta": 37, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -37, "tier": "critical"}, {"name": "Especialización en Internet de las Cosas", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 0, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 0, "tier": "good"}]}, {"id": "CU Chiquinquirá", "label": "CU Chiquinquirá", "totals": {"nuevos_real": 3, "nuevos_meta": 51, "continuos_real": 5, "continuos_meta": 55, "total_real": 8, "total_meta": 106, "nuevos_pct": 0.058823529411764705, "continuos_pct": 0.09090909090909091, "total_pct": 0.07547169811320754, "gap": -98, "tier": "critical"}, "programs": [{"name": "Ingeniería de Sistemas", "nuevos_real": 3, "nuevos_meta": 17, "continuos_real": 2, "continuos_meta": 15, "total_real": 5, "total_meta": 32, "nuevos_pct": 0.17647058823529413, "continuos_pct": 0.13333333333333333, "total_pct": 0.15625, "gap": -27, "tier": "critical"}, {"name": "Trabajo Social", "nuevos_real": 0, "nuevos_meta": 17, "continuos_real": 3, "continuos_meta": 16, "total_real": 3, "total_meta": 33, "nuevos_pct": 0.0, "continuos_pct": 0.1875, "total_pct": 0.09090909090909091, "gap": -30, "tier": "critical"}, {"name": "Administración en Seguridad y Salud en el Trabajo", "nuevos_real": 0, "nuevos_meta": 17, "continuos_real": 0, "continuos_meta": 13, "total_real": 0, "total_meta": 30, "nuevos_pct": 0.0, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -30, "tier": "critical"}, {"name": "Especialización en Gerencia de Proyectos", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 11, "total_real": 0, "total_meta": 11, "nuevos_pct": null, "continuos_pct": 0.0, "total_pct": 0.0, "gap": -11, "tier": "critical"}, {"name": "Administración de Empresas", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 0, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 0, "tier": "good"}, {"name": "Especialización en Bienestar Integral en las Organizaciones", "nuevos_real": 0, "nuevos_meta": 0, "continuos_real": 0, "continuos_meta": 0, "total_real": 0, "total_meta": 0, "nuevos_pct": null, "continuos_pct": null, "total_pct": null, "gap": 0, "tier": "good"}]}]}};
+
+function fmt(n){
+  if (n === null || n === undefined) return '&mdash;';
+  return Math.round(n).toLocaleString('es-CO');
+}
+function fmtPct(p){
+  if (p === null || p === undefined) return '&mdash;';
+  return (p*100).toLocaleString('es-CO', {minimumFractionDigits:2, maximumFractionDigits:2}) + '%';
+}
+function tierClass(t){ return t || 'good'; }
+
+function switchPage(key){
+  document.querySelectorAll('.section-page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.section-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + key).classList.add('active');
+  document.querySelector('.section-tab[data-page="' + key + '"]').classList.add('active');
+}
+
+function renderPicker(key, data){
+  const container = document.getElementById('picker-' + key);
+  container.innerHTML = '';
+  data.groups.forEach((g, idx) => {
+    const t = g.totals;
+    const card = document.createElement('button');
+    card.className = 'picker-card' + (idx === 0 ? ' active' : '');
+    card.setAttribute('data-id', g.id);
+    const pctW = Math.max(0, Math.min(100, (t.total_pct || 0) * 100));
+    card.innerHTML =
+      '<div class="p-tag tag-' + tierClass(t.tier) + '">' + (g.id.startsWith('CU') ? 'CU' : 'CT') + '</div>' +
+      '<div class="p-name">' + g.label + '</div>' +
+      '<div class="p-sub">' + fmt(t.total_real) + ' de ' + fmt(t.total_meta) + ' matriculados</div>' +
+      '<div class="p-pct pct-' + tierClass(t.tier) + '">' + fmtPct(t.total_pct) + '</div>' +
+      '<div class="p-track"><div class="p-fill tier-' + tierClass(t.tier) + '" style="width:' + pctW + '%"></div></div>';
+    card.addEventListener('click', () => selectGroup(key, g.id));
+    container.appendChild(card);
+  });
+}
+
+function renderSummary(key, g){
+  const t = g.totals;
+  const el = document.getElementById('summary-' + key);
+  el.innerHTML =
+    '<div class="selected-summary">' +
+      '<div><h3>' + g.label + '</h3><div class="sel-meta">' + g.programs.length + ' programa(s) con matrícula activa</div></div>' +
+      '<div class="selected-stats">' +
+        '<div><div class="s-label">Nuevos</div><div class="s-value">' + fmt(t.nuevos_real) + ' / ' + fmt(t.nuevos_meta) + '</div></div>' +
+        '<div><div class="s-label">Continuos</div><div class="s-value">' + fmt(t.continuos_real) + ' / ' + fmt(t.continuos_meta) + '</div></div>' +
+        '<div><div class="s-label">Total</div><div class="s-value">' + fmt(t.total_real) + ' / ' + fmt(t.total_meta) + '</div></div>' +
+        '<div><div class="s-label">Cumplimiento</div><div class="s-value">' + fmtPct(t.total_pct) + '</div></div>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderBullets(key, g){
+  const container = document.getElementById('bullets-' + key);
+  container.innerHTML = '';
+  if (!g.programs.length){
+    container.innerHTML = '<div class="empty-state">Este centro no registra programas con matrícula en el periodo.</div>';
+    return;
+  }
+  g.programs.forEach(p => {
+    const maxScale = Math.max(p.total_real, p.total_meta, 1) * 1.15;
+    const fillW = Math.max(0, Math.min(100, (p.total_real / maxScale) * 100));
+    const targetPos = Math.max(0, Math.min(100, (p.total_meta / maxScale) * 100));
+    const band1 = Math.min(100, (maxScale * 0.5 / maxScale) * 100);
+    const band2 = Math.min(100, (maxScale * 0.8 / maxScale) * 100);
+    const gapVal = p.gap;
+    const gapClass = gapVal >= 0 ? 'positive' : '';
+    const gapLabel = (gapVal >= 0 ? '+' : '&minus;') + fmt(Math.abs(gapVal));
+
+    const row = document.createElement('div');
+    row.className = 'bullet-card';
+    row.innerHTML =
+      '<div class="bullet-name">' + p.name + '<span class="b-sub">Nuevos ' + fmt(p.nuevos_real) + '/' + fmt(p.nuevos_meta) + ' &middot; Continuos ' + fmt(p.continuos_real) + '/' + fmt(p.continuos_meta) + '</span></div>' +
+      '<div class="bullet-chart">' +
+        '<div class="bullet-track">' +
+          '<div class="bullet-band band-poor" style="left:0; width:' + band1 + '%"></div>' +
+          '<div class="bullet-band band-satis" style="left:' + band1 + '%; width:' + (band2-band1) + '%"></div>' +
+          '<div class="bullet-band band-good" style="left:' + band2 + '%; right:0"></div>' +
+          '<div class="bullet-fill tier-' + tierClass(p.tier) + '" style="width:' + fillW + '%"></div>' +
+          '<div class="bullet-target" style="left:' + targetPos + '%"></div>' +
+        '</div>' +
+        '<div class="bullet-labels"><span>0</span><span>' + fmt(maxScale) + '</span></div>' +
+      '</div>' +
+      '<div class="bullet-stats">' +
+        '<div class="bullet-pct pct-' + tierClass(p.tier) + '">' + fmtPct(p.total_pct) + '</div>' +
+        '<div class="bullet-gap ' + gapClass + '">' + gapLabel + ' vs meta</div>' +
+        '<div class="bullet-breakdown"><span class="bd-chip">Real ' + fmt(p.total_real) + '</span><span class="bd-chip">Meta ' + fmt(p.total_meta) + '</span></div>' +
+      '</div>';
+    container.appendChild(row);
+  });
+}
+
+function selectGroup(key, groupId){
+  const data = REPORT_DATA[key];
+  const g = data.groups.find(x => x.id === groupId);
+  if (!g) return;
+  document.querySelectorAll('#picker-' + key + ' .picker-card').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('data-id') === groupId);
+  });
+  renderSummary(key, g);
+  renderBullets(key, g);
+}
+
+function initSection(key){
+  const data = REPORT_DATA[key];
+  renderPicker(key, data);
+  if (data.groups.length){
+    selectGroup(key, data.groups[0].id);
+  }
+}
+
+initSection('s2');
+initSection('q3');
+</script>
+</body>
+</html>
